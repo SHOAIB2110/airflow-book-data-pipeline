@@ -15,7 +15,7 @@ airflow-book-data-pipeline
 |   
 +---logs
 
-![Architecture Diagram](img\Architecture.jpg)
+![Architecture Diagram](img/Architecture.jpg)
 
 The pipeline consists of the following stages:
 
@@ -34,6 +34,8 @@ The pipeline consists of the following stages:
    - **load_to_postgres():** Reads the transformed CSV file, applies necessary data cleaning (e.g., converting `NaN` to `None`), and loads the data into a PostgreSQL database using batch inserts/upserts. The table schema is created (if not exists) to match the final required columns.
 
 5. **Database Validation:**  
+ Executes SQL queries on the PostgreSQL database to validate the loaded data. It checks the total record count, missing critical fields, duplicate ISBNs, invalid ISBN formats, and other quality metrics. The results are written to a validation report file.
+
 ---
 ## 🔑 How to Get API Keys
 
@@ -123,9 +125,9 @@ docker ps
 - **Password:** `airflow`
 
 👉 *Once inside Airflow, navigate to **`book_data_pipeline`** and trigger the DAG .*
-[Airflow UI](img\Arflow.jpg)
-[Airflow1 UI](img\Arflow1.jpg)
-[Airflow2 UI](img\Arflow2.jpg)
+[Airflow UI](img/Arflow.jpg)
+[Airflow1 UI](img/Arflow1.jpg)
+[Airflow2 UI](img/Arflow2.jpg)
 ---
 
 ## 📊 Database Inspection
