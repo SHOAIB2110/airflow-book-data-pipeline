@@ -68,7 +68,7 @@ def fetch_google_books_data():
     isbn_list = [book["primary_isbn13"] for book in nyt_data["results"]["books"]]
     google_books_data = {}
     for isbn in isbn_list:
-        url = GOOGLE_BOOKS_URL.format(isbn, 'AIzaSyDOzoeNzG6xHoxhyDfKlBp77MnDu4jgnDU')
+        url = GOOGLE_BOOKS_URL.format(isbn, GOOGLE_BOOKS_API_KEY)
         try:
             google_books_data[isbn] = fetch_data(url)
         except Exception as e:
