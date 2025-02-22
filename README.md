@@ -178,4 +178,15 @@ All logs for each task will be stored inside the **logs/** folder.
 ```bash
 docker logs -f airflow-book-data-pipeline-airflow-scheduler-1
 ```
+---
+
+## 📄 Reports & Outputs
+
+All generated reports, including data validation reports and quality checks, will be stored inside the **dags/** folder.
+
+- **Data Quality Report:** `dags/data/data_validation_report.txt`
+- **Transformed Data File:** `dags/data/transformed_books.csv`
+
+
+---
 
