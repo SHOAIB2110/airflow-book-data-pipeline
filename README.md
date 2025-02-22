@@ -4,11 +4,10 @@ A fully automated **book data pipeline** using **Apache Airflow** (or Prefect), 
 
 ---
 
-## 🏗 Project Overview & Architecture Diagram
+## 📌 Project Overview & Architecture Diagram
 
-The pipeline extracts book data from external APIs, validates and transforms it, and loads it into a PostgreSQL database. The entire process is orchestrated using **Airflow DAGs** (or Prefect flows).
+This project automates book data extraction, validation, and storage using **ETL** principles. Below is the architecture diagram:
 
-\
 ![Architecture Diagram](IMG_2.jpg)
 
 ---
