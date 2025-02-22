@@ -7,6 +7,10 @@ A fully automated **book data pipeline** using **Apache Airflow**, integrated wi
 ## 📌 Project Overview & Architecture Diagram
 
 This project automates book data extraction, validation, and storage using **ETL** principles. Below is the architecture diagram:
+
+![Architecture Diagram](img/Architecture.jpg)
+
+```
 airflow-book-data-pipeline
 |docker-compose.yaml
 +---dags
@@ -14,32 +18,37 @@ airflow-book-data-pipeline
 |   \---data
 |   
 +---logs
-
-![Architecture Diagram](img/Architecture.jpg)
+```
 
 The pipeline consists of the following stages:
 
-1. **Data Extraction:**  
-   - **fetch_nytimes_books():** Fetches the bestseller list from the New York Times Books API and stores the JSON response in `dags/data/nyt_books.json`.
-   - **fetch_openlibrary_data():** Reads the NYT data, extracts ISBNs, and retrieves additional metadata (e.g., cover images, subjects) from the Open Library API, saving the output to `dags/data/openlibrary_data.json`.
-   - **fetch_google_books_data():** Uses the list of ISBNs from the NYT data to query the Google Books API for detailed book information, storing the JSON response in `dags/data/google_books.json`.
+1. **Data Extraction:**
 
-2. **Data Transformation & Enrichment:**  
-   - **transform_and_enrich_data():** Loads the JSON files from the extraction phase, merges and cleans the data, and then exports a unified CSV file (`dags/data/transformed_books.csv`). It integrates data from all sources (NYT, OpenLibrary, and Google Books) to match the final schema.
+   - **fetch\_nytimes\_books():** Fetches the bestseller list from the New York Times Books API and stores the JSON response in `dags/data/nyt_books.json`.
+   - **fetch\_openlibrary\_data():** Reads the NYT data, extracts ISBNs, and retrieves additional metadata (e.g., cover images, subjects) from the Open Library API, saving the output to `dags/data/openlibrary_data.json`.
+   - **fetch\_google\_books\_data():** Uses the list of ISBNs from the NYT data to query the Google Books API for detailed book information, storing the JSON response in `dags/data/google_books.json`.
 
-3. **Data Quality Inspection & Validation:**  
-   - **data_quality_checks():** Reads the transformed CSV file and performs checks for missing values, duplicate records, and other anomalies. It generates a data quality report saved as `dags/data/data_validation_report.txt`.
+2. **Data Transformation & Enrichment:**
 
-4. **Data Loading:**  
-   - **load_to_postgres():** Reads the transformed CSV file, applies necessary data cleaning (e.g., converting `NaN` to `None`), and loads the data into a PostgreSQL database using batch inserts/upserts. The table schema is created (if not exists) to match the final required columns.
+   - **transform\_and\_enrich\_data():** Loads the JSON files from the extraction phase, merges and cleans the data, and then exports a unified CSV file (`dags/data/transformed_books.csv`). It integrates data from all sources (NYT, OpenLibrary, and Google Books) to match the final schema.
 
-5. **Database Validation:**  
- Executes SQL queries on the PostgreSQL database to validate the loaded data. It checks the total record count, missing critical fields, duplicate ISBNs, invalid ISBN formats, and other quality metrics. The results are written to a validation report file.
+3. **Data Quality Inspection & Validation:**
+
+   - **data\_quality\_checks():** Reads the transformed CSV file and performs checks for missing values, duplicate records, and other anomalies. It generates a data quality report saved as `dags/data/data_validation_report.txt`.
+
+4. **Data Loading:**
+
+   - **load\_to\_postgres():** Reads the transformed CSV file, applies necessary data cleaning (e.g., converting `NaN` to `None`), and loads the data into a PostgreSQL database using batch inserts/upserts. The table schema is created (if not exists) to match the final required columns.
+
+5. **Database Validation:**\
+   Executes SQL queries on the PostgreSQL database to validate the loaded data. It checks the total record count, missing critical fields, duplicate ISBNs, invalid ISBN formats, and other quality metrics. The results are written to a validation report file.
 
 ---
+
 ## 🔑 How to Get API Keys
 
 ### 📖 Google Books API Key
+
 1. Go to [Google Cloud Console](https://console.cloud.google.com/).
 2. Create a new project or select an existing one.
 3. Navigate to **APIs & Services > Library**.
@@ -49,12 +58,15 @@ The pipeline consists of the following stages:
 7. Copy the generated API Key.
 
 ### 📰 New York Times (NYT) API Key
+
 1. Visit [NYT Developer Portal](https://developer.nytimes.com/).
 2. Sign in or create a free account.
 3. Click on **Get Started** and create a new App.
 4. Select **Books API** and request an API key.
 5. Copy the generated API Key.
+
 ---
+
 ## 🔧 Installation & Setup
 
 ### 1️⃣ Install Docker Desktop
@@ -76,8 +88,8 @@ cd airflow-book-data-pipeline
 Before running the pipeline, export the API keys :
 
 ```bash
-export API_KEY_NYT=your-nyt-api-key
-export API_KEY_GOOGLE=your-google-api-key
+export  NYT_API_KEY= your-nyt-api-key
+export GOOGLE_BOOKS_API_KEY= your-google-api-key
 ```
 
 ✅ **Verify Environment Variables:**
@@ -117,30 +129,36 @@ docker ps
 ---
 
 ## 🌐 Access Airflow UI
-![Airflow UI](img\Architecture.jpg)
+
+
+
 ### 🔑 Default Credentials
 
 - **URL:** [http://localhost:8080](http://localhost:8080)
 - **Username:** `airflow`
 - **Password:** `airflow`
 
-👉 *Once inside Airflow, navigate to **`book_data_pipeline`** and trigger the DAG .*
-[Airflow UI](img/Arflow.jpg)
-[Airflow1 UI](img/Arflow1.jpg)
-[Airflow2 UI](img/Arflow2.jpg)
+👉 *Once inside Airflow, navigate to **********`book_data_pipeline`********** and trigger the DAG.*
+
+![Airflow UI](img/airflow.jpeg)
+
+![Airflow1 UI](img/airflow1.jpeg)
+
+![Airflow2 UI](img/airflow2.jpeg)
+
 ---
 
 ## 📊 Database Inspection
 
-### **Checking Database for Data Completeness & Quality**  
+### **Checking Database for Data Completeness & Quality**
 
-To ensure data completeness and quality, first, access the **PostgreSQL** database inside the running Docker container:  
+To ensure data completeness and quality, first, access the **PostgreSQL** database inside the running Docker container:
 
 ```bash
 docker exec -it airflow-book-data-pipeline-postgres-1 psql -U airflow -d airflow
 ```
 
-Once inside the **PostgreSQL shell**, run the following queries to check the data:  
+Once inside the **PostgreSQL shell**, run the following queries to check the data:
 
 ```sql
 SELECT * FROM books LIMIT 10;
@@ -149,18 +167,15 @@ SELECT COUNT(*) FROM books WHERE title IS NULL;
 
 These queries will help verify that the data has been correctly ingested and stored. 🚀📊
 
-
 ---
 
 ## 🛠 Debugging & Logs
 
 ### 1️⃣ Check Airflow Logs
+
 All logs for each task will be stored inside the **logs/** folder.
 
 ```bash
 docker logs -f airflow-book-data-pipeline-airflow-scheduler-1
 ```
-
-
-
 
