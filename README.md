@@ -1,95 +1,132 @@
-# ��� Book Data Pipeline
+# 📚 Book Data Pipeline
 
-A fully automated book data pipeline using **Apache Airflow** or **Prefect**, integrated with APIs (NYT, OpenLibrary, Google Books), and storing results in **PostgreSQL**.
-
----
-
-## ��� Features
-✅ Automated ETL Pipeline  
-✅ API Data Extraction (NYT, OpenLibrary, Google Books)  
-✅ Data Validation & Quality Checks  
-✅ Docker Support for Easy Deployment  
-✅ Scalable & Maintainable DAG/Flow Structure  
+A fully automated **book data pipeline** using **Apache Airflow** (or Prefect), integrated with APIs (**NYT, OpenLibrary, Google Books**) and storing results in **PostgreSQL**.
 
 ---
 
-## ⚙️ Project Structure
+## 🏗 Project Overview & Architecture Diagram
 
-book_data_pipeline/ │── dags/ # Airflow DAGs │ ├── book_pipeline.py # Main ETL Pipeline │ ├── data/ # Stores temporary data (ignored in Git) │── logs/ # Logs directory (ignored in Git) │── plugins/ # Custom operators & hooks │── Dockerfile # Docker setup │── docker-compose.yml # Compose setup for Airflow │── requirements.txt # Python dependencies │── README.md # Project documentation │── .gitignore # Ignored files
+The pipeline extracts book data from external APIs, validates and transforms it, and loads it into a PostgreSQL database. The entire process is orchestrated using **Airflow DAGs** (or Prefect flows).
 
+\
+👉 *Replace **`IMG_2.jpg`** with the actual path to your image*
 
-2️⃣ Set Up a Virtual Environment
-bash
-Copy
-Edit
-python -m venv venv
-source venv/bin/activate  # For Mac/Linux
-venv\Scripts\activate     # For Windows
+---
+
+## 🔧 Installation & Setup
+
+### 1️⃣ Install Docker Desktop
+
+This project runs inside Docker containers. **Install Docker Desktop** before proceeding:
+
+- [Download Docker](https://www.docker.com/products/docker-desktop)
+- Follow the installation instructions for your OS.
+
+### 2️⃣ Clone the Repository
+
+```bash
+git clone https://github.com/your-username/book_data_pipeline.git
+cd book_data_pipeline
+```
+
+### 3️⃣ Set Up Environment Variables
+
+Before running the pipeline, export the API keys and database variables:
+
+```bash
+export API_KEY_NYT=your-nyt-api-key
+export API_KEY_GOOGLE=your-google-api-key
+```
+
+✅ **Verify Environment Variables:**
+
+```bash
+echo $API_KEY_NYT
+echo $API_KEY_GOOGLE
+```
+
+### 4️⃣ Install Dependencies (Optional for Local Execution)
+
+Create a **virtual environment** and install dependencies:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate  # Mac/Linux
+venv\Scripts\activate     # Windows
 pip install -r requirements.txt
-��� Running with Docker
-1️⃣ Build and Start Docker Containers
-bash
-Copy
-Edit
+```
+
+---
+
+## 🚀 Running the Pipeline with Docker
+
+### 1️⃣ Build and Start Containers
+
+```bash
 docker-compose up --build -d
-2️⃣ Check Running Containers
-bash
-Copy
-Edit
+```
+
+### 2️⃣ Check Running Containers
+
+```bash
 docker ps
-3️⃣ Access the Airflow Web UI
-URL: http://localhost:8080
-Default Credentials:
-Username: airflow
-Password: airflow
-��� Environment Variables
-Before running, create a .env file:
+```
 
-bash
-Copy
-Edit
-touch .env
-Edit .env:
+---
 
-env
-Copy
-Edit
-AIRFLOW__CORE__EXECUTOR=LocalExecutor
-POSTGRES_USER=airflow
-POSTGRES_PASSWORD=airflow
-POSTGRES_DB=airflow
-API_KEY_NYT=your-nyt-api-key
-API_KEY_GOOGLE=your-google-api-key
-��� Running the Pipeline
-Trigger DAG from the Airflow UI or manually run:
+## 🌐 Access Airflow UI
 
-bash
-Copy
-Edit
-airflow dags trigger book_pipeline
-��� Checking Database for Data
-Run the following queries in PostgreSQL to validate the data:
+### 🔑 Default Credentials
 
-sql
-Copy
-Edit
+- **URL:** [http://localhost:8080](http://localhost:8080)
+- **Username:** `airflow`
+- **Password:** `airflow`
+
+👉 *Once inside Airflow, navigate to **`book_pipeline`** and trigger the DAG manually.*
+
+---
+
+## 📊 Database Inspection
+
+To ensure data completeness and quality, run the following queries in **PostgreSQL**:
+
+```sql
 SELECT * FROM books LIMIT 10;
 SELECT COUNT(*) FROM books WHERE title IS NULL;
-��� Logs & Debugging
-Check logs inside Docker:
+```
 
-bash
-Copy
-Edit
+---
+
+## 🛠 Debugging & Logs
+
+### 1️⃣ Check Airflow Logs
+
+```bash
 docker logs -f airflow_scheduler
-Check task logs:
+```
 
-bash
-Copy
-Edit
+### 2️⃣ Check Task Logs
+
+```bash
 airflow tasks logs book_pipeline extract_books
-��� Contributing
-Fork the repository
-Create a feature branch
-Commit changes
-Push and create a pull request
+```
+
+---
+
+## 🤝 Contributing
+
+1. **Fork** the repository
+2. **Create a feature branch**
+3. **Commit changes**
+4. **Push and create a Pull Request**
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License.
+
+---
+
+Happy Coding! 🚀
+
