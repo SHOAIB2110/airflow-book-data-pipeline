@@ -9,7 +9,7 @@ A fully automated **book data pipeline** using **Apache Airflow** (or Prefect), 
 The pipeline extracts book data from external APIs, validates and transforms it, and loads it into a PostgreSQL database. The entire process is orchestrated using **Airflow DAGs** (or Prefect flows).
 
 \
-👉 *Replace **`IMG_2.jpg`** with the actual path to your image*
+![Architecture Diagram](IMG_2.jpg)
 
 ---
 
